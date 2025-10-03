@@ -1,1 +1,56 @@
+import requests
+from bs4 import BeautifulSoup
+from random import choice
+from time import sleep
+
+# URL to scrape country and capital info
+url = "https://www.scrapethissite.com/pages/simple/"
+
+res = requests.get(url)
+soup = BeautifulSoup(res.text, "html.parser")
+
+# Extract country data
+all_countries = []
+countries = soup.find_all("div", class_="country")
+
+for country in countries:
+    name = country.find("h3", class_="country-name").get_text(strip=True)
+    capital = country.find("span", class_="country-capital").get_text(strip=True)
+    population = country.find("span", class_="country-population").get_text(strip=True)
+    area = country.find("span", class_="country-area").get_text(strip=True)
+
+    if name and capital:  # only store valid data
+        all_countries.append({
+            "name": name,
+            "capital": capital,
+            "population": population,
+            "area": area
+        })
+
+# Pick a random country
+country = choice(all_countries)
+remaining_guesses = 4
+
+print("Guess the capital of this country:")
+print(f"Country: {country['name']}")
+
+guess = ""
+while guess.lower() != country["capital"].lower() and remaining_guesses > 0:
+    guess = input(f"Your guess (Remaining chances {remaining_guesses}): ")
+
+    if guess.lower() == country["capital"].lower():
+        print("🎉 Correct! You guessed it right!")
+        break
+
+    remaining_guesses -= 1
+
+    # Provide hints
+    if remaining_guesses == 3:
+        print(f"Hint: The capital has {len(country['capital'])} letters.")
+    elif remaining_guesses == 2:
+        print(f"Hint: The capital starts with '{country['capital'][0]}'.")
+    elif remaining_guesses == 1:
+        print(f"Hint: The capital ends with '{country['capital'][-1]}'.")
+    else:
+        print(f"❌ Out of guesses! The correct answer was {country['capital']}.")
 
