@@ -39,7 +39,7 @@ while guess.lower() != country["capital"].lower() and remaining_guesses > 0:
     guess = input(f"Your guess (Remaining chances {remaining_guesses}): ")
 
     if guess.lower() == country["capital"].lower():
-        print("🎉 Correct! You guessed it right!")
+        print("Correct! You guessed it right!")
         break
 
     remaining_guesses -= 1
@@ -52,5 +52,5 @@ while guess.lower() != country["capital"].lower() and remaining_guesses > 0:
     elif remaining_guesses == 1:
         print(f"Hint: The capital ends with '{country['capital'][-1]}'.")
     else:
-        print(f"❌ Out of guesses! The correct answer was {country['capital']}.")
+        print(f"Out of guesses! The correct answer was {country['capital']}.")
 
